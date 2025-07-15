@@ -1,0 +1,33 @@
+name: Run Tests
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      - name: Set PYTHONPATH so tests can find app.py
+        run: echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+        
+      - name: Run tests
+        run: |
+          pytest tests/
+      - name: Build Docker image
+        run: docker build -t hello-flask-app .
+      - name: Push to Docker Hub
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker tag hello-flask-app suneel00/hello-flask-app:latest
+          docker push suneel00/hello-flask-app:latest
