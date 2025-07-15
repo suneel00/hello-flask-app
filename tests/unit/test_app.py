@@ -13,4 +13,4 @@ def test_hello(client):
 
 def test_app_exists():
     assert app is not None
-    assert app.name == "app"
+    assert app.name == "app.app"
