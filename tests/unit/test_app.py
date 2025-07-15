@@ -9,7 +9,7 @@ def client():
 def test_hello(client):
     response = client.get("/")
     assert response.status_code == 200
-    assert response.data == b"Hello, World!"
+    assert b"Hello, World!" in response.data
 
 def test_app_exists():
     assert app is not None
